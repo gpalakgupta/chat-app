@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import user from "./route/user.js";
 
 const app = express();
@@ -9,6 +10,7 @@ const URI = process.env.MONGODB_URI;
 
 //  Middleware
 app.use(express.json());
+app.use(cors());
 
 // MongoDB Connection
 const connectDB = async () => {
