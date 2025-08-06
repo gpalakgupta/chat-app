@@ -1,29 +1,37 @@
 import express from 'express';
-import dotenv from "dotenv";
+import 'dotenv/config';
 import mongoose from 'mongoose';
 import user from "./route/user.js";
 
-
-
-
 const app = express();
-dotenv.config();
+const PORT = process.env.PORT || 5000;
+const URI = process.env.MONGODB_URI;
 
-const PORT = process.env.PORT || 4000;
-const URI = process.env.MONGODB_URI
+//  Middleware
+app.use(express.json());
 
-try {
-    mongoose.connect(URI)
-    console.log("Mongo db connected");
-}
-catch (err) {
-    console.log(err);
-}
+// MongoDB Connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(URI, {
+      dbName: 'chat-baat'
+    });
+    console.log("MongoDB connected locally");
+  } catch (err) {
+    console.error(" MongoDB connection error:", err);
+  }
+};
 
-app.use("/user",user);
+connectDB();
 
+// Routes
+// http://localhost:3000/user/signup
+app.use("/user", user);
 
+app.get('/', (req, res) => {
+  res.send("munni badman ho rhi hai");
+});
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+  console.log(` Server running on port ${PORT}`);
+});
