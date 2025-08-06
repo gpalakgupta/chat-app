@@ -26,6 +26,10 @@ connectDB();
 
 // Routes
 // http://localhost:3000/user/signup
+// http://localhost:3000/user/login
+// http://localhost:3000/user/loout
+
+// 
 app.use("/user", user);
 
 app.get('/', (req, res) => {
