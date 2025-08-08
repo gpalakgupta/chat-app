@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import user from "./route/user.js";
+import message from "./route/message.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +41,7 @@ connectDB();
 
 // 
 app.use("/api/user", user);
+app.use("/api/message",message);
 
 app.get('/', (req, res) => {
   res.send("munni badman ho rhi hai");
