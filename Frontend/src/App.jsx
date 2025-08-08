@@ -6,12 +6,14 @@ import Signup from "./component/Signup";
 import Login from "./component/Login";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthProvider";
+import Loading from "./component/Loading";
 
 const App = () => {
   const { authuser } = useAuth();
 
   return (
     <>
+    {/* <Loading/> */}
       <Routes>
         <Route
           path="/"
