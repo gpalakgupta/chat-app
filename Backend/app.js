@@ -11,7 +11,11 @@ const URI = process.env.MONGODB_URI;
 
 //  Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:4001",  
+  credentials: true
+}));
+
 app.use(cookieParser())
 
 // MongoDB Connection
@@ -34,7 +38,7 @@ connectDB();
 // http://localhost:3000/user/loout
 
 // 
-app.use("/user", user);
+app.use("/api/user", user);
 
 app.get('/', (req, res) => {
   res.send("munni badman ho rhi hai");

@@ -1,7 +1,7 @@
 import React from "react";
 import Users from "./Users";
 
-const User = () => {
+const User = ({user}) => {
   return (
     <div className="flex space-x-4 px-8 py-4 hover:bg-slate-600 duration-300 cursor-pointer rounded-lg items-center">
       <div className="avatar avatar-online">
@@ -10,8 +10,8 @@ const User = () => {
         </div>
       </div>
       <div>
-        <h1 className="font-bold">Palak Gupta</h1>
-        <span>Palak@gmail.com</span>
+        <h1 className="font-bold">{user.name}</h1>
+        <span>{user.email}</span>
       </div>
     </div>
   );

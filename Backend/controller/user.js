@@ -42,18 +42,23 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!user || !isMatch) {
-            return res.status(404).json({ message: "invalid User or password" });
+        if (!user) {
+            return res.status(404).json({ message: "Invalid user or password" });
         }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(404).json({ message: "Invalid user or password" });
+        }
+
         createTokenAndSaveCookie(user._id, res);
         res.status(201).json({
-            message: "User logged in successfully", user: {
+            message: "User logged in successfully",
+            user: {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
@@ -64,7 +69,8 @@ export const login = async (req, res) => {
         console.log(error);
         res.status(500).json({ message: "Server error" });
     }
-}
+};
+
 
 export const logout = async (req, res) => {
     try {
@@ -81,11 +87,14 @@ export const logout = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
     try {
-        const loggedInUser = req.user._id; // ✅ lowercase "user"
+        const loggedInUser = req.user._id; 
         const filteredUser = await User.find({ _id: { $ne: loggedInUser } }).select("-password");
-        res.status(200).json({ filteredUser });
+
+        // Direct array bhejna
+        res.status(200).json(filteredUser);
+
     } catch (err) {
-        console.log("err in all users controller: " + err);
+        console.log("err in all users controller:", err);
         res.status(500).json({ message: "Server error" });
     }
 };
