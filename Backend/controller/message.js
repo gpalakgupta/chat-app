@@ -26,7 +26,7 @@ export const sendMessage = async (req, res) => {
         if (!conversation) {
             conversation = new Conversation({
                 participants: [senderId, receiverId],
-                messages: []   
+                messages: []
             });
         }
 
@@ -47,5 +47,26 @@ export const sendMessage = async (req, res) => {
     } catch (err) {
         console.log("err in sending message", err);
         res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const getMessage = async (req, res) => {
+    try {
+        const senderId = req.user._id.toString();
+        const chatuser = req.params.id.toString();
+
+        const conversation = await Conversation.findOne({
+            participants: { $all: [senderId, chatuser] },
+        }).populate("messages");
+
+        if (!conversation) {
+            return res.status(200).json({ message: "No conversation found" });
+        }
+
+        const messages = conversation.messages;
+        res.status(200).json({ messages });
+    } catch (err) {
+        console.log("Message getting error", err);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
