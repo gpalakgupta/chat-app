@@ -1,21 +1,24 @@
 import React from "react";
 
-const Message = () => {
-  return (
-    <>
-      <div className="p-4">
-        <div className="chat chat-start">
-          <div className="chat-bubble chat-bubble-info">Calm down, Anakin.</div>
-        </div>
+const Message = ({ message }) => {
+  const storedUser = localStorage.getItem("messange");
+  const authuser = storedUser ? JSON.parse(storedUser) : null;
 
-        <div className="chat chat-end">
-          <div className="chat-bubble chat-bubble-accent">
-            That's never been done in the history of the Jedi. It's insulting!
-          </div>
+  // If no user info in storage, consider not "me"
+  const itsme = authuser && message.senderId === authuser.user._id;
+
+  const chatName = itsme ? "chat-end" : "chat-start";
+  const chatColor = itsme ? "bg-blue-400" : "bg-gray-400";  
+
+  return (
+    <div className="p-4">
+      <div className={`chat ${chatName}`}>
+        <div className={`chat-bubble text-white ${chatColor}`}>
+          {message.message || "(empty message)"}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Message; 
+export default Message;
