@@ -4,7 +4,6 @@ const Message = ({ message }) => {
   const storedUser = localStorage.getItem("messange");
   const authuser = storedUser ? JSON.parse(storedUser) : null;
 
-  // If no user info in storage, consider not "me"
   const itsme = authuser && message.senderId === authuser.user._id;
 
   const chatName = itsme ? "chat-end" : "chat-start";
