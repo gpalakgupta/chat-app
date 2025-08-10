@@ -9,28 +9,25 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(() => {
-    let newSocket;
-    if (authUser?.user?._id) {
-      newSocket = io("http://localhost:3000", {
-        query: { userId: authUser.user._id },
-      });
+    if (!authUser || !authUser.user || !authUser.user._id) return;
 
-      setSocket(newSocket);
+    const newSocket = io("http://localhost:3000", {
+      query: { userId: authUser.user._id },
+      transports: ["websocket"],
+      withCredentials: true,
+    });
 
-      newSocket.on("getOnline", (users) => {
-        setOnlineUsers(users);
-      });
+    setSocket(newSocket);
 
-      return () => {
-        newSocket.close();
-      };
-    } else {
-      if (socket) {
-        socket.close();
-        setSocket(null);
-      }
-    }
-  }, [authUser]);
+    newSocket.on("getOnline", (users) => {
+      // console.log("Online users from backend:", users);
+      setOnlineUsers(users);
+    });
+
+    return () => {
+      newSocket.close();
+    };
+  }, [authUser?.user?._id]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>

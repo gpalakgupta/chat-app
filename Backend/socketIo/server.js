@@ -15,7 +15,9 @@ const io = new Server(server, {
 const users = {};
 
 io.on("connection", (socket) => {
-    console.log("✅ New client connected:", socket.id);
+    console.log("New client connected:", socket.id);
+    console.log("User ID from query:", socket.handshake.query.userId);
+
 
     const userId = socket.handshake.query.userId;
     if (userId) {
@@ -25,17 +27,17 @@ io.on("connection", (socket) => {
 
     // isse yeh pta chalega kon kon se user online hai
 
-    io.emit("getOnline",Object.keys(users))
+    io.emit("getOnline", Object.keys(users))
 
     socket.on("disconnect", () => {
         console.log("Client disconnected:", socket.id);
         // Remove user from active list
-        delete user[userId];
-        io.emit('getOnline',Object.keys(users));
+        delete users[userId];
+        io.emit('getOnline', Object.keys(users));
     });
 });
 
- 
 
 
-export {app,io,server}
+
+export { app, io, server }
