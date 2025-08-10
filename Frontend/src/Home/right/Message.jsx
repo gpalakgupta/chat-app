@@ -7,12 +7,12 @@ console.log("Auth user object:", authuser);
 
 const itsme = authuser?.user?._id === message.senderId;
 
-console.log("Sender ID from message:", message.senderId);
-console.log("My user ID:", authuser?._id);
-console.log(
-  "Match?",
-  String(message.senderId) === String(authuser?._id)
-);
+// console.log("Sender ID from message:", message.senderId);
+// console.log("My user ID:", authuser?._id);
+// console.log(
+//   "Match?",
+//   String(message.senderId) === String(authuser?._id)
+// );
 
 
   const chatName = itsme ? "chat-end" : "chat-start";
