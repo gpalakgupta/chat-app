@@ -23,15 +23,15 @@ io.on("connection", (socket) => {
         console.log(" Active Users:", users);
     }
 
+    // isse yeh pta chalega kon kon se user online hai
+
+    io.emit("getOnline",Object.keys(users))
+
     socket.on("disconnect", () => {
         console.log("Client disconnected:", socket.id);
         // Remove user from active list
-        for (const id in users) {
-            if (users[id] === socket.id) {
-                delete users[id];
-                break;
-            }
-        }
+        delete user[userId];
+        io.emit('getOnline',Object.keys(users));
     });
 });
 
