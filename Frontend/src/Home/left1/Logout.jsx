@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import axios from "axios";
 import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const Logout = () => {
   const [loading, setLoading] = useState(false);
@@ -13,9 +14,11 @@ const Logout = () => {
       localStorage.removeItem("messanger");
       Cookies.remove("jet");
       setLoading(false);
-      alert("Logout successfully");
+      toast.success("Logout successfully");
+      navigate("/login");
     } catch (err) {
       console.log(err);
+      toast.error("Failed to logout");
     }
   };
   return (

@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/Authprovider.jsx";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const { setAuthUser } = useAuth();
@@ -35,14 +36,14 @@ const Signup = () => {
       );
 
       if (res.data) {
-        alert("Signup successful! You can now log in.");
+        toast.success("Signup successful! You can now log in.");
         localStorage.setItem("messanger", JSON.stringify(res.data));
         setAuthUser(res.data);
         navigate("/login"); // Redirect to login page
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Signup failed");
+      toast.error(err.response?.data?.message || "Signup failed");
     }
   };
 

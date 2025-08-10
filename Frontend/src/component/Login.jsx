@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/Authprovider.jsx";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { setAuthUser } = useAuth();
@@ -21,20 +22,17 @@ const Login = () => {
     };
 
     try {
-      const res = await axios.post(
-        "/api/user/login",
-        userInfo
-      );
+      const res = await axios.post("/api/user/login", userInfo);
 
       if (res.data) {
-        alert("Login successful!");
+        toast.success("Login successful!");
         localStorage.setItem("messanger", JSON.stringify(res.data));
         setAuthUser(res.data);
         navigate("/"); // Redirect to home
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
