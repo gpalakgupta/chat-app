@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Conversation from "../models/conversation_model.js";
 import Message from "../models/message_model.js";
+import { getReceiverSocketId } from "../socketIo/server.js";
 
 export const sendMessage = async (req, res) => {
     try {
@@ -39,6 +40,10 @@ export const sendMessage = async (req, res) => {
             conversation.save(),
             newMessage.save()
         ]);
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+        }
 
         // Convert Mongoose doc to plain object + force string IDs
         const messageObj = newMessage.toObject();

@@ -12,6 +12,12 @@ const io = new Server(server, {
     }
 });
 
+// real time messages
+
+export const getReceiverSocketId = (receiverId) => {
+    return users[receiverId];
+}
+
 const users = {};
 
 io.on("connection", (socket) => {
