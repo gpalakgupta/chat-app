@@ -7,43 +7,40 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:4001", // FRONTEND URL
+        origin: "http://localhost:4001",
         methods: ["GET", "POST"]
     }
 });
 
-// real time messages
-
-export const getReceiverSocketId = (receiverId) => {
-    return users[receiverId];
-}
-
+// users = { userId: Set(socketId) }
 const users = {};
 
+// Function to get all socket IDs of a receiver
+export const getReceiverSocketIds = (receiverId) => {
+    return users[receiverId] ? Array.from(users[receiverId]) : [];
+};
+
 io.on("connection", (socket) => {
-    console.log("New client connected:", socket.id);
-    console.log("User ID from query:", socket.handshake.query.userId);
-
-
     const userId = socket.handshake.query.userId;
     if (userId) {
-        users[userId] = socket.id;
-        console.log(" Active Users:", users);
+        if (!users[userId]) users[userId] = new Set();
+        users[userId].add(socket.id);
+        console.log("User connected:", userId, socket.id);
     }
 
-    // isse yeh pta chalega kon kon se user online hai
-
-    io.emit("getOnline", Object.keys(users))
+    // Emit online users list
+    io.emit("getOnline", Object.keys(users));
 
     socket.on("disconnect", () => {
-        console.log("Client disconnected:", socket.id);
-        // Remove user from active list
-        delete users[userId];
-        io.emit('getOnline', Object.keys(users));
+        if (userId && users[userId]) {
+            users[userId].delete(socket.id);
+            if (users[userId].size === 0) {
+                delete users[userId];
+            }
+        }
+        io.emit("getOnline", Object.keys(users));
+        console.log("User disconnected:", userId, socket.id);
     });
 });
 
-
-
-
-export { app, io, server }
+export { app, io, server };

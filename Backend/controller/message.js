@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Conversation from "../models/conversation_model.js";
 import Message from "../models/message_model.js";
-import { getReceiverSocketId } from "../socketIo/server.js";
+import { getReceiverSocketIds, io } from "../socketIo/server.js";  // import io and getReceiverSocketIds
 
 export const sendMessage = async (req, res) => {
     try {
@@ -40,12 +40,13 @@ export const sendMessage = async (req, res) => {
             conversation.save(),
             newMessage.save()
         ]);
-        const receiverSocketId = getReceiverSocketId(receiverId);
-        if (receiverSocketId) {
-            io.to(receiverSocketId).emit("newMessage", newMessage);
-        }
 
-        // Convert Mongoose doc to plain object + force string IDs
+        // Emit to all sockets of receiver
+        const receiverSocketIds = getReceiverSocketIds(receiverId);
+        receiverSocketIds.forEach(socketId => {
+            io.to(socketId).emit("newMessage", newMessage);
+        });
+
         const messageObj = newMessage.toObject();
         messageObj.senderId = senderId.toString();
         messageObj.receiverId = receiverId.toString();
@@ -56,7 +57,6 @@ export const sendMessage = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
 
 export const getMessage = async (req, res) => {
     try {
