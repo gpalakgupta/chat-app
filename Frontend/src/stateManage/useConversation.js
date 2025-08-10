@@ -5,7 +5,7 @@ const useConversation = create((set) => ({
   setSelectedConversation: (conversation) => set({ selectedConversation: conversation }),
   messages: [],
   setMessages: (messages) => set({ messages }), // if you want to replace messages array
-  // addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })) // to add a message
+  addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })) // to add a message
 }));
 
 export default useConversation;

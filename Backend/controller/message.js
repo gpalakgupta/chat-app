@@ -8,13 +8,10 @@ export const sendMessage = async (req, res) => {
         const { id: receiverIdRaw } = req.params;
         const senderIdRaw = req.user._id;
 
-        // Sanitize IDs (remove colon if any)
         const sanitizeId = (id) => id.toString().replace(/^:/, '');
-
         const senderId = sanitizeId(senderIdRaw);
         const receiverId = sanitizeId(receiverIdRaw);
 
-        // Optional: Validate ObjectIds
         if (!mongoose.Types.ObjectId.isValid(senderId) || !mongoose.Types.ObjectId.isValid(receiverId)) {
             return res.status(400).json({ message: "Invalid user IDs" });
         }
@@ -43,12 +40,18 @@ export const sendMessage = async (req, res) => {
             newMessage.save()
         ]);
 
-        res.status(201).json({ message: "Message sent successfully", newMessage });
+        // Convert Mongoose doc to plain object + force string IDs
+        const messageObj = newMessage.toObject();
+        messageObj.senderId = senderId.toString();
+        messageObj.receiverId = receiverId.toString();
+
+        res.status(201).json(messageObj);
     } catch (err) {
         console.log("err in sending message", err);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 export const getMessage = async (req, res) => {
     try {

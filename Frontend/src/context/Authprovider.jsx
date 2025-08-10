@@ -7,11 +7,11 @@ export const AuthContext = createContext();
 // 2. Create the provider component
 export const AuthProvider = ({ children }) => {
   // We only use localStorage for storing the user object
-  const initialUserState = localStorage.getItem("messanger");
+  const initialUserState = localStorage.getItem("messenger");
 
   const [authuser, setAuthUser] = useState(
-    // initialUserState ? JSON.parse(initialUserState) : undefined
-    null
+    initialUserState ? JSON.parse(initialUserState) : undefined
+     
   );
 
   return (
