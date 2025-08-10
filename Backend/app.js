@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import user from "./route/user.js";
 import message from "./route/message.js";
+import { app, server } from './socketIo/server.js';
 
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 
@@ -47,6 +48,6 @@ app.get('/', (req, res) => {
   res.send("munni badman ho rhi hai");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(` Server running on port ${PORT}`);
 });
