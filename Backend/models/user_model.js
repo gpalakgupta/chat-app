@@ -14,6 +14,11 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    } , 
+
+    isOnboarded : {
+        type : Boolean,
+        default : false
     }
 }, {
     timestamps: true

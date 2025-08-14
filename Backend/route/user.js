@@ -10,5 +10,4 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.get("/getUserProfile",secureRoute, getUserProfile)
 
-
 export default router;

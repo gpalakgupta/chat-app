@@ -7,7 +7,6 @@ import user from "./route/user.js";
 import message from "./route/message.js";
 import { app, server } from './socketIo/server.js';
 
-
 // const app = express();
 const PORT = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;

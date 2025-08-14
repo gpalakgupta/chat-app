@@ -54,6 +54,9 @@ export const login = async (req, res) => {
         if (!isMatch) {
             return res.status(404).json({ message: "Invalid user or password" });
         }
+        else{
+            User.isOnboarded= true;
+        }
 
         createTokenAndSaveCookie(user._id, res);
         res.status(201).json({
@@ -83,11 +86,10 @@ export const logout = async (req, res) => {
     }
 }
 
-
-
 export const getUserProfile = async (req, res) => {
     try {
         const loggedInUser = req.user._id; 
+        console.log("fetUserProfile route: ", loggedInUser)
         const filteredUser = await User.find({ _id: { $ne: loggedInUser } }).select("-password");
 
         // Direct array bhejna
